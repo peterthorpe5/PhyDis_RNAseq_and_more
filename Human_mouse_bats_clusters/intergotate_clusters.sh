@@ -34,11 +34,13 @@ python filter_RNAseq_CSV.py --fdr ${FDR} -l ${LOGFC}
 # the wonders of data!
 
 
-python convert_gene_names.py -i human_gene_to_symblo.info --goi ${RNAseq_dir}/human_LOGFC_${LOGFC}_FDR_${FDR} \
+python convert_gene_names.py -i human_gene_to_symblo.info \
+    --goi ${RNAseq_dir}/human_LOGFC_${LOGFC}_FDR_${FDR} \
     -o ${RNAseq_dir}/human_prot_id_LOGFC_${LOGFC}_FDR_${FDR}
     
 # repeat for mouse
-python convert_gene_names.py -i mus_gene_to_symblo.info --goi ${RNAseq_dir}/mouse_LOGFC_${LOGFC}_FDR_${FDR} \
+python convert_gene_names.py -i mus_gene_to_symblo.info     
+    --goi ${RNAseq_dir}/mouse_LOGFC_${LOGFC}_FDR_${FDR} \
     -o ${RNAseq_dir}/mouse_prot_id_LOGFC_${LOGFC}_FDR_${FDR}
 
 # repeat for bats. 
@@ -47,18 +49,30 @@ python convert_gene_names.py -i mus_gene_to_symblo.info --goi ${RNAseq_dir}/mous
 # 5)
 # Now we have prot ID names that have been filtered on thresholds, which are viable. Lets pick the clusters 
 # which have DE genes in them. 
-python interogate_clusters.py --goi ${RNAseq_dir}/human_prot_id_LOGFC_${LOGFC}_FDR_${FDR} -o human_DE_${LOGFC}_FDR_${FDR}_clusters
+python interogate_clusters.py --goi ${RNAseq_dir}/human_prot_id_LOGFC_${LOGFC}_FDR_${FDR} \
+    -o human_DE_${LOGFC}_FDR_${FDR}_clusters
 
-python interogate_clusters.py --goi ${RNAseq_dir}/mouse_prot_id_LOGFC_${LOGFC}_FDR_${FDR} -o mouse_DE_${LOGFC}_FDR_${FDR}_clusters
+python interogate_clusters.py --goi ${RNAseq_dir}/mouse_prot_id_LOGFC_${LOGFC}_FDR_${FDR} \
+    -o mouse_DE_${LOGFC}_FDR_${FDR}_clusters
 
-python interogate_clusters.py --goi ${RNAseq_dir}/phydis_LOGFC_${LOGFC}_FDR_${FDR} -o phydis_DE_${LOGFC}_FDR_${FDR}_clusters
+python interogate_clusters.py --goi ${RNAseq_dir}/phydis_LOGFC_${LOGFC}_FDR_${FDR} \
+    -o phydis_DE_${LOGFC}_FDR_${FDR}_clusters
 
 # 6)
 # Now we have to clusters, lets see which species could be found in these clusters. 
 
 python cluster_membership.py --in1 human_DE_${LOGFC}_FDR_${FDR}_clusters \
     --in2 mouse_DE_${LOGFC}_FDR_${FDR}_clusters \
-    --in3 phydis_DE_${LOGFC}_FDR_${FDR}_clusters
+    --in3 phydis_DE_${LOGFC}_FDR_${FDR}_clusters \
+    -o cluster_summary_${LOGFC}_FDR_${FDR}.RESULTS
+    
+# 7) optional: convert the protein IDS for humans and mouse back to "gene name"
+
+python convert_membership_names.py --hu human_gene_to_symblo.info \
+    --mu mus_gene_to_symblo.info \
+    --in cluster_summary_${LOGFC}_FDR_${FDR}.RESULTS \
+    -o cluster_summary_${LOGFC}_FDR_${FDR}_gene_name.RESULTS
+
 
 
 
