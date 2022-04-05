@@ -1,7 +1,0 @@
-	condition	animal	side	Age_of_bat	reps
-GFP_Striatum_rep1	GFP_Striatum	1	right	8	GFP_Striatum_rep1
-GFP_Striatum_rep3	GFP_Striatum	3	right	3	GFP_Striatum_rep3
-GFP_Striatum_rep4	GFP_Striatum	4	right	3	GFP_Striatum_rep4
-KI_Striatum_rep1	KI_Striatum	1	left	8	KI_Striatum_rep1
-KI_Striatum_rep4	KI_Striatum	4	left	3	KI_Striatum_rep4
-
