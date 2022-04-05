@@ -95,7 +95,7 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     logger.info("these genes are")
     f_out.write("\n%s and %s COMMON: these genes are\n" % (species1, species2))
     
-    for cluster in common_to_all:
+    for cluster in common_to_1_and_2_unique:
         gene1 = species1_dict[cluster]
         gene2 = species2_dict[cluster]
         outdata = "\t".join([species1, gene1, species2, 

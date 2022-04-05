@@ -13,6 +13,53 @@ from collections import defaultdict
 from modules.database import parse_NCBI_gffcol9_info, test_line
 
 
+def parse_infile(in1, hu_prot_id_to_gene, hu_gene_to_product, 
+                 hu_prot_id_to_product, mo_prot_id_to_gene,
+                 mo_gene_to_product, 
+                 mo_prot_id_to_product,
+                 outfile, logger):
+    """ funk to parse the infile and convert the prot id
+    to gene names. and annotations. """
+    f_in = open(in1, "r")
+    f_out = open(outfile, "w")
+    for line in f_in:
+        if test_line(line):
+            if not line.startswith("human\t") and not line.startswith("mouse\t"):
+                f_out.write(line)
+                #print(line)
+                
+            else:
+                # here we could have any number of species. 
+                new_line = line
+                data = line.split("\t")
+                if data[0] == "human":
+                    hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
+                    hu_annot = hu_prot_id_to_product[data[1].rstrip()]
+                    # print(data[1], hu_gene, hu_annot)
+                    outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
+                    new_line = new_line.replace(data[1].rstrip(), outfmt)
+
+                if data[2] == "mouse":
+                    mo_gene = mo_prot_id_to_gene[data[3].rstrip()]
+                    mo_annot = mo_prot_id_to_product[data[3].rstrip()]
+                    # print(data[3], mo_gene, mo_annot)
+                    outfmt = "\t".join([data[3].rstrip(), mo_gene, mo_annot])
+                    new_line = new_line.replace(data[3].rstrip(), outfmt)
+                
+                if data[0] == "mouse":
+                    mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
+                    mo_annot = mo_prot_id_to_product[data[1].rstrip()]
+                    # print(data[1], mo_gene, mo_annot)
+                    outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
+                    new_line = new_line.replace(data[1].rstrip(), outfmt)
+                # print(new_line.rstrip())
+                f_out.write(new_line)
+
+                    
+        
+            
+        
+    
     
 
 if "-v" in sys.argv or "--version" in sys.argv:
@@ -82,4 +129,10 @@ if __name__ == '__main__':
             hu_prot_id_to_product = parse_NCBI_gffcol9_info(human)
 
     mo_gene_to_prot, mo_prot_id_to_gene, mo_gene_to_product, \
-            mo_prot_id_to_product = parse_NCBI_gffcol9_info(mouse)   
+            mo_prot_id_to_product = parse_NCBI_gffcol9_info(mouse)
+            
+    parse_infile(in1, hu_prot_id_to_gene, hu_gene_to_product, 
+                 hu_prot_id_to_product, mo_prot_id_to_gene,
+                 mo_gene_to_product, 
+                 mo_prot_id_to_product,
+                 outfile, logger)
