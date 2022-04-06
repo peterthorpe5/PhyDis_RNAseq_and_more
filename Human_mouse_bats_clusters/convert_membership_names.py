@@ -32,28 +32,47 @@ def parse_infile(in1, hu_prot_id_to_gene, hu_gene_to_product,
                 # here we could have any number of species. 
                 new_line = line
                 data = line.split("\t")
-                if data[0] == "human":
-                    hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
-                    hu_annot = hu_prot_id_to_product[data[1].rstrip()]
-                    # print(data[1], hu_gene, hu_annot)
-                    outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
-                    new_line = new_line.replace(data[1].rstrip(), outfmt)
+                if len(data) > 2:
+                    if data[0] == "human":
+                        hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
+                        hu_annot = hu_prot_id_to_product[data[1].rstrip()]
+                        # print(data[1], hu_gene, hu_annot)
+                        outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
+                        new_line = new_line.replace(data[1].rstrip(), outfmt)
 
-                if data[2] == "mouse":
-                    mo_gene = mo_prot_id_to_gene[data[3].rstrip()]
-                    mo_annot = mo_prot_id_to_product[data[3].rstrip()]
-                    # print(data[3], mo_gene, mo_annot)
-                    outfmt = "\t".join([data[3].rstrip(), mo_gene, mo_annot])
-                    new_line = new_line.replace(data[3].rstrip(), outfmt)
-                
-                if data[0] == "mouse":
-                    mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
-                    mo_annot = mo_prot_id_to_product[data[1].rstrip()]
-                    # print(data[1], mo_gene, mo_annot)
-                    outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
-                    new_line = new_line.replace(data[1].rstrip(), outfmt)
-                # print(new_line.rstrip())
-                f_out.write(new_line)
+                    if data[2] == "mouse":
+                        mo_gene = mo_prot_id_to_gene[data[3].rstrip()]
+                        mo_annot = mo_prot_id_to_product[data[3].rstrip()]
+                        # print(data[3], mo_gene, mo_annot)
+                        outfmt = "\t".join([data[3].rstrip(), mo_gene, mo_annot])
+                        new_line = new_line.replace(data[3].rstrip(), outfmt)
+                    
+                    if data[0] == "mouse":
+                        mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
+                        mo_annot = mo_prot_id_to_product[data[1].rstrip()]
+                        # print(data[1], mo_gene, mo_annot)
+                        outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
+                        new_line = new_line.replace(data[1].rstrip(), outfmt)
+                    # print(new_line.rstrip())
+                    f_out.write(new_line)
+                else:
+                    # print(line)
+                    if data[0] == "human":
+                        hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
+                        hu_annot = hu_prot_id_to_product[data[1].rstrip()]
+                        # print(data[1], hu_gene, hu_annot)
+                        outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
+                        new_line = new_line.replace(data[1].rstrip(), outfmt)
+
+                    if data[0] == "mouse":
+                        mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
+                        mo_annot = mo_prot_id_to_product[data[1].rstrip()]
+                        # print(data[1], mo_gene, mo_annot)
+                        outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
+                        new_line = new_line.replace(data[1].rstrip(), outfmt)
+
+                    # print(new_line.rstrip())
+                    f_out.write(new_line)
 
                     
         

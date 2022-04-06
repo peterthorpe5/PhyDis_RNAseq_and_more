@@ -140,6 +140,46 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
                              gene3])
         logger.info(outdata)
         f_out.write(outdata + "\n")
+    ###############################################
+    # gene unique to speices1
+    species1_unique = species1_set.difference(species2_set, species3_set)
+    outdata = "Clusters which contained a DE genes UNIQUE species1 : %d\t%s\n" % (len(species1_unique), species1_unique)                                      
+    logger.info(outdata)
+    f_out.write(outdata + "\n")
+    for cluster in species1_unique:
+        gene = species1_dict[cluster]
+        outdata = "\t".join([species1, gene])
+        logger.info(outdata)
+        f_out.write(outdata + "\n")
+    
+    ###############################################
+    # gene unique to speices2
+    species2_unique = species2_set.difference(species1_set, species3_set)
+    outdata = "Clusters which contained a DE genes UNIQUE species2 : %d\t%s\n" % (len(species2_unique), species2_unique)                                      
+    logger.info(outdata)
+    f_out.write(outdata + "\n")
+    for cluster in species2_unique:
+        gene = species2_dict[cluster]
+        outdata = "\t".join([species2, gene])
+        logger.info(outdata)
+        f_out.write(outdata + "\n")
+        
+    
+    ###############################################
+    # gene unique to speices3
+    species3_unique = species3_set.difference(species1_set, species2_set)
+    outdata = "Clusters which contained a DE genes UNIQUE species3 : %d\t%s\n" % (len(species3_unique), species3_unique)                                      
+    logger.info(outdata)
+    f_out.write(outdata + "\n")
+    for cluster in species3_unique:
+        gene = species3_dict[cluster]
+        outdata = "\t".join([species3, gene])
+        logger.info(outdata)
+        f_out.write(outdata + "\n")
+    
+    # close the file
+    f_out.write(outdata)
+    
     f_out.close()
     
 
