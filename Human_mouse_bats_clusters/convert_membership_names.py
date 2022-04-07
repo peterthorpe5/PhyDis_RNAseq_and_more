@@ -17,7 +17,7 @@ def parse_infile(in1, hu_prot_id_to_gene, hu_gene_to_product,
                  hu_prot_id_to_product, mo_prot_id_to_gene,
                  mo_gene_to_product, 
                  mo_prot_id_to_product,
-                 outfile, logger):
+                 outfile, GOI_literature, logger):
     """ funk to parse the infile and convert the prot id
     to gene names. and annotations. """
     f_in = open(in1, "r")
@@ -35,43 +35,74 @@ def parse_infile(in1, hu_prot_id_to_gene, hu_gene_to_product,
                 if len(data) > 2:
                     if data[0] == "human":
                         hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
+                        GOI_found = "\n\tGENE_OF_INTEREST_FROM_LIT\t"
+                        if hu_gene.upper() in GOI_literature:
+                            GOI_found = GOI_found + hu_gene
+                        if GOI_found == "\n\tGENE_OF_INTEREST_FROM_LIT\t":
+                            GOI_found =  ""
                         hu_annot = hu_prot_id_to_product[data[1].rstrip()]
                         # print(data[1], hu_gene, hu_annot)
                         outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
                         new_line = new_line.replace(data[1].rstrip(), outfmt)
+                        new_line =  new_line.rstrip()  + GOI_found + "\n"
 
                     if data[2] == "mouse":
                         mo_gene = mo_prot_id_to_gene[data[3].rstrip()]
+                        GOI_found = "\n\tGENE_OF_INTEREST_FROM_LIT\t"
+                        if mo_gene.upper() in GOI_literature:
+                            GOI_found = GOI_found + mo_gene
+                        if GOI_found == "\n\tGENE_OF_INTEREST_FROM_LIT\t":
+                            GOI_found =  ""
                         mo_annot = mo_prot_id_to_product[data[3].rstrip()]
                         # print(data[3], mo_gene, mo_annot)
                         outfmt = "\t".join([data[3].rstrip(), mo_gene, mo_annot])
                         new_line = new_line.replace(data[3].rstrip(), outfmt)
+                        new_line =  new_line.rstrip()  + GOI_found + "\n"
                     
                     if data[0] == "mouse":
                         mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
+                        GOI_found = "\n\tGENE_OF_INTEREST_FROM_LIT\t"
+                        if mo_gene.upper() in GOI_literature:
+                            GOI_found = GOI_found + mo_gene
+                        if GOI_found == "\n\tGENE_OF_INTEREST_FROM_LIT\t":
+                            GOI_found =  ""
                         mo_annot = mo_prot_id_to_product[data[1].rstrip()]
                         # print(data[1], mo_gene, mo_annot)
                         outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
                         new_line = new_line.replace(data[1].rstrip(), outfmt)
+                        new_line =  new_line.rstrip()  + GOI_found + "\n"
                     # print(new_line.rstrip())
                     f_out.write(new_line)
                 else:
                     # print(line)
                     if data[0] == "human":
                         hu_gene = hu_prot_id_to_gene[data[1].rstrip()]
+                        GOI_found = "\n\tGENE_OF_INTEREST_FROM_LIT\t"
+                        if hu_gene.upper() in GOI_literature:
+                            GOI_found = GOI_found + hu_gene
+                        if GOI_found == "\n\tGENE_OF_INTEREST_FROM_LIT\t":
+                            GOI_found =  ""
                         hu_annot = hu_prot_id_to_product[data[1].rstrip()]
                         # print(data[1], hu_gene, hu_annot)
                         outfmt = "\t".join([data[1].rstrip(), hu_gene, hu_annot])
                         new_line = new_line.replace(data[1].rstrip(), outfmt)
+                        new_line =  new_line.rstrip()  + GOI_found + "\n"
 
                     if data[0] == "mouse":
                         mo_gene = mo_prot_id_to_gene[data[1].rstrip()]
+                        GOI_found = "\n\tGENE_OF_INTEREST_FROM_LIT\t"
+                        if mo_gene.upper() in GOI_literature:
+                            GOI_found = GOI_found + mo_gene
+                        if GOI_found == "\n\tGENE_OF_INTEREST_FROM_LIT\t":
+                            GOI_found =  ""
                         mo_annot = mo_prot_id_to_product[data[1].rstrip()]
                         # print(data[1], mo_gene, mo_annot)
                         outfmt = "\t".join([data[1].rstrip(), mo_gene, mo_annot])
                         new_line = new_line.replace(data[1].rstrip(), outfmt)
+                        new_line =  new_line.rstrip()  + GOI_found + "\n"
 
                     # print(new_line.rstrip())
+                    new_line = new_line.replace("\n\n", "\n")
                     f_out.write(new_line)
 
                     
@@ -143,6 +174,12 @@ if __name__ == '__main__':
         logger.error("Could not open %s for logging" %
                      logfile)
         sys.exit(1)
+    GOI_literature = set([])
+    f_goi = open("Genes227.txt", "r")
+    for line in f_goi:
+        if test_line(line):
+            line = line.upper()
+            GOI_literature.add(line.strip())
     
     hu_gene_to_prot, hu_prot_id_to_gene, hu_gene_to_product, \
             hu_prot_id_to_product = parse_NCBI_gffcol9_info(human)
@@ -154,4 +191,4 @@ if __name__ == '__main__':
                  hu_prot_id_to_product, mo_prot_id_to_gene,
                  mo_gene_to_product, 
                  mo_prot_id_to_product,
-                 outfile, logger)
+                 outfile, GOI_literature, logger)

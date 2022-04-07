@@ -36,7 +36,7 @@ def parse_file(infile, outfile, LOGFC_threshold, FDR_threshold, logger):
         FDR = row["padj"]
         out_data = "%s\t%s\t%s\n" % (name, logfc, FDR)
         if name in name_set:
-            print("duplicate", name)
+            # print("duplicate", name)
             continue
         # add the name to the set        
         name_set.add(name)
@@ -47,11 +47,11 @@ def parse_file(infile, outfile, LOGFC_threshold, FDR_threshold, logger):
                 gene_names.add(name)
                 f_out.write(out_data)
         # convert the negative to positive for easy testing
-        if (logfc * 1.0) >= float(LOGFC_threshold):
-            #print(line.rstrip())
+        if (logfc * -1.0) >= float(LOGFC_threshold):
             if FDR <= float(FDR_threshold):
                 count = count + 1
                 gene_names.add(name)
+                out_data = "%s\t%s\t%s\n" % (name, logfc, FDR)
                 f_out.write(out_data)
 
     f_out.close()

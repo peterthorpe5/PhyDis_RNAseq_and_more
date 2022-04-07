@@ -38,7 +38,7 @@ def populate_set(infile, set, indict):
             
 
 
-def parse_DE_cluster(in1, in2, in3, outfile, logger):
+def parse_DE_cluster(in1, in2, in3, outfile, GOI_literature, logger):
     """fucn take in the  GOI_set
     if the gene in the orthofinder output check if gene in cluster. """
     f_out = open(outfile, "w")
@@ -74,13 +74,22 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     f_out.write(outdata)
     logger.info("these genes are")
     f_out.write("DE genes from ALL species - these genes are\n")
-    
+    GOI_found = "\nGENE_OF_INTEREST_FROM_LIT\t"
     for cluster in common_to_all:
         gene1 = species1_dict[cluster]
+        print(gene1)
         gene2 = species2_dict[cluster]
         gene3 = species3_dict[cluster]
+        if gene1.upper() in GOI_literature:
+            GOI_found = GOI_found + gene1
+        if gene2.upper() in GOI_literature:
+            GOI_found = GOI_found + gene2
+        if gene3.upper() in GOI_literature:
+            GOI_found = GOI_found + gene3
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
         outdata = "\t".join([species1, gene1, species2, 
-                             gene2, species3, gene3])
+                             gene2, species3, gene3, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     
@@ -94,12 +103,18 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
 
     logger.info("these genes are")
     f_out.write("\n%s and %s COMMON: these genes are\n" % (species1, species2))
-    
+    GOI_found = "\nGENE_OF_INTEREST_FROM_LIT\t"
     for cluster in common_to_1_and_2_unique:
         gene1 = species1_dict[cluster]
         gene2 = species2_dict[cluster]
+        if gene1.upper() in GOI_literature:
+            GOI_found = GOI_found + gene1
+        if gene2.upper() in GOI_literature:
+            GOI_found = GOI_found + gene2
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
         outdata = "\t".join([species1, gene1, species2, 
-                             gene2])
+                             gene2, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     
@@ -113,12 +128,19 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     
     logger.info("these genes are")
     f_out.write("\n%s and %s COMMON: these genes are\n" % (species1, species3))
-    
+    GOI_found = "\nGENE_OF_INTEREST_FROM_LIT\t"
+   
     for cluster in common_to_1_and_3_unique:
         gene1 = species1_dict[cluster]
         gene3 = species3_dict[cluster]
+        if gene1.upper() in GOI_literature:
+            GOI_found = GOI_found + gene1
+        if gene3.upper() in GOI_literature:
+            GOI_found = GOI_found + gene3
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
         outdata = "\t".join([species1, gene1, species3, 
-                             gene3])
+                             gene3, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     
@@ -132,12 +154,19 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     
     logger.info("these genes are")
     f_out.write("\n%s and %s COMMON: these genes are\n" % (species2, species3))
-    
+    GOI_found = "\nGENE_OF_INTEREST_FROM_LIT\t"
+
     for cluster in common_to_2_and_3_unique:
         gene2 = species2_dict[cluster]
         gene3 = species3_dict[cluster]
+        if gene2.upper() in GOI_literature:
+            GOI_found = GOI_found + gene2
+        if gene3.upper() in GOI_literature:
+            GOI_found = GOI_found + gene3
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
         outdata = "\t".join([species2, gene2, species3, 
-                             gene3])
+                             gene3, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     ###############################################
@@ -146,9 +175,14 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     outdata = "Clusters which contained a DE genes UNIQUE species1 : %d\t%s\n" % (len(species1_unique), species1_unique)                                      
     logger.info(outdata)
     f_out.write(outdata + "\n")
+    GOI_found = "\nGENE_OF_INTEREST_FROM_LIT\t"
     for cluster in species1_unique:
         gene = species1_dict[cluster]
-        outdata = "\t".join([species1, gene])
+        if gene.upper() in GOI_literature:
+            GOI_found = GOI_found + gene
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
+        outdata = "\t".join([species1, gene, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     
@@ -160,7 +194,11 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     f_out.write(outdata + "\n")
     for cluster in species2_unique:
         gene = species2_dict[cluster]
-        outdata = "\t".join([species2, gene])
+        if gene.upper() in GOI_literature:
+            GOI_found = GOI_found + gene
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
+        outdata = "\t".join([species2, gene, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
         
@@ -173,7 +211,11 @@ def parse_DE_cluster(in1, in2, in3, outfile, logger):
     f_out.write(outdata + "\n")
     for cluster in species3_unique:
         gene = species3_dict[cluster]
-        outdata = "\t".join([species3, gene])
+        if gene.upper() in GOI_literature:
+            GOI_found = GOI_found + gene
+        if GOI_found == "\nGENE_OF_INTEREST_FROM_LIT\t":
+            GOI_found =  ""
+        outdata = "\t".join([species3, gene, GOI_found])
         logger.info(outdata)
         f_out.write(outdata + "\n")
     
@@ -245,6 +287,12 @@ if __name__ == '__main__':
         logger.error("Could not open %s for logging" %
                      logfile)
         sys.exit(1)
+    GOI_literature = set([])
+    f_goi = open("Genes227.txt", "r")
+    for line in f_goi:
+        if test_line(line):
+            line = line.upper()
+            GOI_literature.add(line.strip())
     
-    parse_DE_cluster(in1, in2, in3, outfile, logger)
+    parse_DE_cluster(in1, in2, in3, outfile, GOI_literature, logger)
             
